@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GooglePlayIcon, WindowsIcon, GlobeIcon, Play, Check, Video } from './icons.jsx'
 
 /*
@@ -8,10 +8,10 @@ import { GooglePlayIcon, WindowsIcon, GlobeIcon, Play, Check, Video } from './ic
  * Leave it empty to show a "coming soon" placeholder.
  * `poster` is optional — a thumbnail image for video files (YouTube thumbnails are automatic).
  */
-export const GUIDES = [
+const GUIDES = [
   {
     id: 'android',
-    tab: 'Android app',
+    tab: 'Android',
     Icon: GooglePlayIcon,
     title: 'How to use FOCAS on your Android phone',
     text: 'A quick walkthrough of installing the app from Google Play, signing in and finding your classes.',
@@ -21,7 +21,7 @@ export const GUIDES = [
   },
   {
     id: 'windows',
-    tab: 'Windows app',
+    tab: 'Windows',
     Icon: WindowsIcon,
     title: 'How to use FOCAS on your Windows PC',
     text: 'Set up the desktop app from the Microsoft Store and get the most out of big-screen learning.',
@@ -31,7 +31,7 @@ export const GUIDES = [
   },
   {
     id: 'web',
-    tab: 'Web app',
+    tab: 'Web',
     Icon: GlobeIcon,
     title: 'How to use the FOCAS web app',
     text: 'Learn from any browser — no installation needed. Ideal for Mac, iPhone and iPad users.',
@@ -46,7 +46,53 @@ function youTubeId(url) {
   return m ? m[1] : null
 }
 
-function Player({ guide }) {
+// Plays MP4 files directly, and HLS streams (.m3u8, e.g. Bunny Stream) natively on Safari/iOS
+// or through hls.js elsewhere. hls.js is only downloaded when an HLS video is actually shown.
+function FileVideo({ url, poster, onPortrait }) {
+  const ref = useRef(null)
+  const isHls = /\.m3u8(\?|$)/i.test(url)
+
+  useEffect(() => {
+    const video = ref.current
+    if (!video) return
+    if (!isHls || video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = url
+      return
+    }
+    let hls
+    let cancelled = false
+    import('hls.js').then(({ default: Hls }) => {
+      if (cancelled) return
+      if (Hls.isSupported()) {
+        hls = new Hls()
+        hls.loadSource(url)
+        hls.attachMedia(video)
+      } else {
+        video.src = url
+      }
+    })
+    return () => {
+      cancelled = true
+      hls?.destroy()
+    }
+  }, [url, isHls])
+
+  return (
+    <video
+      ref={ref}
+      className="size-full bg-black object-contain"
+      poster={poster || undefined}
+      controls
+      preload="metadata"
+      playsInline
+      onLoadedMetadata={(e) => onPortrait(e.currentTarget.videoHeight > e.currentTarget.videoWidth)}
+    >
+      Your browser does not support embedded videos.
+    </video>
+  )
+}
+
+function Player({ guide, onPortrait }) {
   const [playing, setPlaying] = useState(false)
   const ytId = guide.url ? youTubeId(guide.url) : null
 
@@ -64,19 +110,7 @@ function Player({ guide }) {
   }
 
   if (!ytId) {
-    return (
-      <video
-        key={guide.url}
-        className="size-full bg-black object-contain"
-        src={guide.url}
-        poster={guide.poster || undefined}
-        controls
-        preload="metadata"
-        playsInline
-      >
-        Your browser does not support embedded videos.
-      </video>
-    )
+    return <FileVideo key={guide.url} url={guide.url} poster={guide.poster} onPortrait={onPortrait} />
   }
 
   if (playing) {
@@ -116,6 +150,9 @@ function Player({ guide }) {
 
 export default function VideoGuides({ active, onChange }) {
   const guide = GUIDES.find((g) => g.id === active) ?? GUIDES[0]
+  // Vertical (phone) recordings get a phone-shaped frame instead of a 16:9 one.
+  const [portrait, setPortrait] = useState({})
+  const isPortrait = portrait[guide.id]
 
   return (
     <section id="guides" className="scroll-mt-20 py-20 sm:py-28">
@@ -130,7 +167,7 @@ export default function VideoGuides({ active, onChange }) {
 
         {/* tabs */}
         <div className="reveal mt-10 flex justify-center">
-          <div role="tablist" aria-label="Choose a video guide" className="inline-flex max-w-full gap-1 overflow-x-auto rounded-2xl bg-slate-100 p-1.5 ring-1 ring-slate-200">
+          <div role="tablist" aria-label="Choose a video guide" className="grid w-full grid-cols-3 gap-1 rounded-2xl sm:inline-flex sm:w-auto bg-slate-100 p-1.5 ring-1 ring-slate-200">
             {GUIDES.map((g) => {
               const selected = g.id === guide.id
               return (
@@ -142,12 +179,13 @@ export default function VideoGuides({ active, onChange }) {
                   aria-selected={selected}
                   aria-controls="guide-panel"
                   onClick={() => onChange(g.id)}
-                  className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200 sm:px-5 ${
+                  className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200 sm:px-5 ${
                     selected ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   <g.Icon className={`size-4 ${g.id === 'web' && selected ? 'text-brand-600' : ''}`} />
                   {g.tab}
+                  <span className="-ml-1.5 hidden sm:inline"> app</span>
                 </button>
               )
             })}
@@ -161,9 +199,19 @@ export default function VideoGuides({ active, onChange }) {
           aria-labelledby={`guide-tab-${guide.id}`}
           className="reveal mt-10 grid items-center gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-12"
         >
-          <div className="overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-brand-900/20 ring-1 ring-slate-200">
-            <div className="aspect-video">
-              <Player key={guide.id} guide={guide} />
+          <div
+            className={`overflow-hidden bg-slate-900 shadow-2xl shadow-brand-900/20 ${
+              isPortrait
+                ? 'mx-auto w-full max-w-[300px] rounded-[2.25rem] p-2 ring-1 ring-slate-700'
+                : 'rounded-3xl ring-1 ring-slate-200'
+            }`}
+          >
+            <div className={isPortrait ? 'aspect-[9/19] overflow-hidden rounded-[1.75rem] bg-black' : 'aspect-video'}>
+              <Player
+                key={guide.id}
+                guide={guide}
+                onPortrait={(v) => setPortrait((p) => (p[guide.id] === v ? p : { ...p, [guide.id]: v }))}
+              />
             </div>
           </div>
 

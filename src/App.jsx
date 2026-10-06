@@ -328,9 +328,7 @@ function Hero({ detected }) {
           </ul>
         </div>
 
-        <div className="relative px-2 sm:px-8 lg:px-0">
-          <DeviceMockups />
-        </div>
+        <DeviceMockups />
       </div>
     </section>
   )
