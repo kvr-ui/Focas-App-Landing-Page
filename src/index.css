@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-brand-50: #eeedff;
+  --color-brand-100: #dcd9ff;
+  --color-brand-200: #b9b3ff;
+  --color-brand-400: #5a4cf0;
+  --color-brand-500: #2a17c9;
+  --color-brand-600: #0f0098;
+  --color-brand-700: #0c007a;
+  --color-brand-800: #09005c;
+  --color-brand-900: #06003d;
+  --color-brand-950: #04002a;
+
+  --color-accent-50: #ebfbeb;
+  --color-accent-100: #cdf5cd;
+  --color-accent-400: #2fd42f;
+  --color-accent-500: #08b708;
+  --color-accent-600: #079a07;
+  --color-accent-700: #067a06;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 8s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white font-sans text-slate-700 antialiased;
+}
+
+::selection {
+  @apply bg-brand-600 text-white;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  * { animation: none !important; }
+}
