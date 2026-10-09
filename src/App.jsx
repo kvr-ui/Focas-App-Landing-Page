@@ -406,12 +406,12 @@ function Platforms({ detected, onWatchGuide }) {
                     <ArrowUpRight className="size-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </a>
                   <a
-                    href="#guides"
+                    href="#install-guide"
                     onClick={() => onWatchGuide(p.id)}
                     className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-brand-600 transition hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200"
                   >
                     <Play className="size-3.5" />
-                    Watch how-to video
+                    Watch install video
                   </a>
                 </div>
               </article>
