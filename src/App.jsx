@@ -40,8 +40,8 @@ const PLATFORMS = [
     href: LINKS.android,
     cta: 'Get it on Google Play',
     CtaIcon: Download,
-    blurb: 'Study on the go. Watch lectures, attend live classes and take tests from your phone.',
-    points: ['Live & recorded classes', 'Push reminders for classes', 'Learn on mobile data or Wi-Fi'],
+    blurb: 'Study on the go. Practise and take tests from your phone — class students can also join tutor sessions and watch video lectures.',
+    points: ['Question Bank & Test Series', 'Tutor sessions & video lectures (class students)', 'Learn on mobile data or Wi-Fi'],
   },
   {
     id: 'windows',
@@ -52,7 +52,7 @@ const PLATFORMS = [
     cta: 'Get it from Microsoft',
     CtaIcon: Download,
     blurb: 'A focused, full-screen classroom on your laptop or desktop — built for long study sessions.',
-    points: ['Big-screen lecture playback', 'Distraction-free desktop app', 'Easy install & auto-updates'],
+    points: ['Big-screen video lectures (class students)', 'Distraction-free desktop app', 'Easy install & auto-updates'],
   },
   {
     id: 'web',
@@ -68,11 +68,11 @@ const PLATFORMS = [
 ]
 
 const FEATURES = [
-  { Icon: Video, title: 'Live & recorded classes', text: 'Join live sessions with faculty, or replay any lecture whenever it suits your schedule.' },
+  { Icon: Video, title: 'Tutor sessions & video lectures', text: 'Join live tutor sessions, or replay recorded classes whenever it suits your schedule.', tag: 'Class students only' },
   { Icon: BookOpen, title: 'Notes & study material', text: 'Chapter-wise notes, PDFs and revision material — organised and available in one place.' },
   { Icon: ClipboardCheck, title: 'Tests & mock exams', text: 'Practise with chapter tests and full-length mocks that mirror the real exam.' },
   { Icon: ChartUp, title: 'Track your progress', text: 'See what you have completed, what is pending and where you need more practice.' },
-  { Icon: Bell, title: 'Never miss a class', text: 'Timely reminders for live classes, new uploads and upcoming tests.' },
+  { Icon: Bell, title: 'Never miss a class', text: 'Timely reminders for tutor sessions, new uploads and upcoming tests.' },
   { Icon: Sync, title: 'One account, every device', text: 'Start a lecture on your phone and finish it on your laptop. Your progress follows you.' },
 ]
 
@@ -89,11 +89,15 @@ const FAQS = [
   },
   {
     q: 'I use an iPhone, iPad or Mac. How do I access FOCAS?',
-    a: 'Open app.focasedu.com in Safari or any modern browser. The web app gives you full access to your courses, classes and tests — no installation needed.',
+    a: 'Open app.focasedu.com in Safari or any modern browser. The web app gives you the same access as the apps — no installation needed.',
   },
   {
     q: 'Which Windows versions are supported?',
     a: 'The FOCAS app is available on the Microsoft Store for Windows 10 and Windows 11 PCs. Click “Get it from Microsoft” and install it like any other Store app.',
+  },
+  {
+    q: 'Can every student join tutor sessions and watch video lectures?',
+    a: 'No. Tutor sessions and video lectures (recorded classes) are available only to students enrolled in FOCAS classes. Kit students get the Question Bank and Test Series.',
   },
   {
     q: 'Are the apps free to download?',
@@ -295,7 +299,7 @@ function Hero({ detected }) {
           </h1>
 
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-slate-600 lg:mx-0">
-            Live classes, recorded lectures, notes and mock tests — all in the FOCAS LMS. Download the app for
+            Question Bank, Test Series and — for class students — tutor sessions and video lectures, all in the FOCAS LMS. Download the app for
             your phone or PC, or jump straight in from your browser.
           </p>
 
@@ -411,7 +415,7 @@ function Platforms({ detected, onWatchGuide }) {
                     className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-brand-600 transition hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200"
                   >
                     <Play className="size-3.5" />
-                    Watch install video
+                    {p.id === 'web' ? 'Watch how-to-use video' : 'Watch install video'}
                   </a>
                 </div>
               </article>
@@ -436,12 +440,17 @@ function Features() {
         />
 
         <div className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-slate-200 ring-1 ring-slate-200 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map(({ Icon, title, text }, i) => (
+          {FEATURES.map(({ Icon, title, text, tag }, i) => (
             <div key={title} className="reveal group bg-white p-8 transition hover:bg-brand-50/40" style={{ transitionDelay: `${(i % 3) * 70}ms` }}>
               <div className="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">
                 <Icon className="size-6" />
               </div>
               <h3 className="mt-5 text-lg font-bold text-slate-900">{title}</h3>
+              {tag && (
+                <span className="mt-2 inline-flex rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                  {tag}
+                </span>
+              )}
               <p className="mt-2 leading-relaxed text-slate-600">{text}</p>
             </div>
           ))}
@@ -578,7 +587,7 @@ function Footer() {
         <div>
           <img src={logoWhite} alt="FOCAS — Your last attempt" className="h-10 w-auto" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed">
-            The official FOCAS Learning Management System — live classes, lectures, notes and tests for FOCAS students.
+            The official FOCAS Learning Management System — Question Bank, Test Series, and tutor sessions and video lectures for class students.
           </p>
         </div>
         <div>

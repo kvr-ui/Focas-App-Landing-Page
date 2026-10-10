@@ -29,7 +29,7 @@ const INSTALL_VIDEOS = {
   web: {
     url: 'https://vz-1b4abbd6-5f1.b-cdn.net/1ec9a871-7fc0-4895-b542-f8ad571c7730/playlist.m3u8',
     poster: '',
-    topics: ['Sign in at app.focasedu.com from any browser', 'Find your courses on Home and My Courses', 'Join your live Tutor Session classes', 'Use Test Series, AI Practice and track your Progress'],
+    topics: ['Sign in at app.focasedu.com from any browser', 'Find your courses on Home and My Courses', 'Tutor sessions & video lectures (class students)', 'Use Test Series, AI Practice and track your Progress'],
   },
 }
 
@@ -37,7 +37,7 @@ const USAGE_VIDEOS = {
   tutor: {
     url: 'https://vz-1b4abbd6-5f1.b-cdn.net/1ec9a871-7fc0-4895-b542-f8ad571c7730/playlist.m3u8',
     poster: '',
-    topics: ['Your dashboard and progress', 'Join live tutor sessions', 'Attendance and study plan', 'Study material, test practice and FOCAS Buddy'],
+    topics: ['Your dashboard and progress', 'Join tutor sessions and watch video lectures', 'Attendance and study plan', 'Study material, test practice and FOCAS Buddy'],
   },
   kit: {
     url: 'https://vz-1b4abbd6-5f1.b-cdn.net/e2944d3d-e245-45c7-bee5-97590fe76d67/playlist.m3u8',
@@ -57,9 +57,9 @@ const STUDENT_TYPES = [
   {
     id: 'tutor',
     label: 'Tutor Session students',
-    text: 'Full access with live tutor sessions',
+    text: 'Class-enrolled: tutor sessions & video lectures',
     title: 'How to use FOCAS — Tutor Session students',
-    about: 'A complete tour of everything in your account: live sessions, attendance, study plan, study material and tests.',
+    about: 'For students enrolled in FOCAS classes: a complete tour of tutor sessions, video lectures (recorded classes), attendance, study plan, study material and tests.',
     Icon: Video,
   },
   {
@@ -67,7 +67,7 @@ const STUDENT_TYPES = [
     label: 'Kit students',
     text: 'Question Bank & Test Series',
     title: 'How to use FOCAS — Kit students',
-    about: 'Your kit includes the Question Bank and Test Series. This video shows how to practise questions and take tests.',
+    about: 'Your kit includes the Question Bank and Test Series. Tutor sessions and video lectures are only for class-enrolled students. This video shows how to practise questions and take tests.',
     Icon: ClipboardCheck,
   },
 ]
