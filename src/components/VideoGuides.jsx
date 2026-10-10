@@ -29,7 +29,7 @@ const INSTALL_VIDEOS = {
   web: {
     url: 'https://vz-1b4abbd6-5f1.b-cdn.net/1ec9a871-7fc0-4895-b542-f8ad571c7730/playlist.m3u8',
     poster: '',
-    topics: ['Open app.focasedu.com in any browser', 'Sign in with your registered phone number', 'Bookmark the page for quick access', 'Optional: add it to your home screen'],
+    topics: ['Sign in at app.focasedu.com from any browser', 'Find your courses on Home and My Courses', 'Join your live Tutor Session classes', 'Use Test Series, AI Practice and track your Progress'],
   },
 }
 
@@ -50,7 +50,7 @@ const USAGE_VIDEOS = {
 const DEVICES = [
   { id: 'android', tab: 'Android', Icon: GooglePlayIcon, title: 'How to install FOCAS on Android', text: 'Get the FOCAS app from Google Play and sign in on your phone.' },
   { id: 'windows', tab: 'Windows', Icon: WindowsIcon, title: 'How to install FOCAS on Windows', text: 'Install the FOCAS desktop app from the Microsoft Store on your Windows PC.' },
-  { id: 'web', tab: 'Web', Icon: GlobeIcon, title: 'How to open the FOCAS web app', text: 'Nothing to install — sign in from any browser on Mac, Windows, iPhone or iPad.' },
+  { id: 'web', tab: 'Web', Icon: GlobeIcon, title: 'How to use the FOCAS web app', text: 'No installation needed — open app.focasedu.com in any browser on Mac, Windows, iPhone or iPad and start learning.', note: 'The web app works in any browser — nothing to download.' },
 ]
 
 const STUDENT_TYPES = [
@@ -258,7 +258,7 @@ export default function VideoGuides({ active, onChange }) {
 
         {/* ── Step 1: install, per device ── */}
         <div id="install-guide" className="reveal mt-14 scroll-mt-24">
-          <BlockHeading step={1} Icon={Download} title="How to install" text="Pick your device to see how to get FOCAS on it." />
+          <BlockHeading step={1} Icon={Download} title="Get started on your device" text="Pick your device to see how to install the app — or how to use FOCAS on the web." />
 
           <div className="mt-6 flex justify-center">
             <div role="tablist" aria-label="Choose a device" className="grid w-full grid-cols-3 gap-1 rounded-2xl bg-slate-100 p-1.5 ring-1 ring-slate-200 sm:inline-flex sm:w-auto">
@@ -293,7 +293,7 @@ export default function VideoGuides({ active, onChange }) {
             video={INSTALL_VIDEOS[device.id]}
             title={device.title}
             text={device.text}
-            note="Switch device above to see another install guide."
+            note={device.note ?? 'Switch device above to see another install guide.'}
           />
         </div>
 
